@@ -50,6 +50,12 @@ def generate_trusted_files(root_dir, already_added_files):
                                 r'|var/.*)$')
     exclude_re = re.compile(excluded_paths_regex)
 
+    with open('gsc_custom_exclfiles.txt') as f:
+        cust_excl_lines = f.read().splitlines()
+        cust_excl_list = [item.strip() for item in cust_excl_lines if item.strip()]
+        cust_excl_list = list(filter(lambda x: x[0] != ';', cust_excl_list))
+    custom_excl_re = re.compile(r'^/({0})$'.format('|'.join(cust_excl_list))) if cust_excl_list else None
+
     num_trusted = 0
     trusted_files = []
 
@@ -61,6 +67,8 @@ def generate_trusted_files(root_dir, already_added_files):
             to_be_walked_dir = os.path.join(dirpath, dirname)
             if exclude_re.match(to_be_walked_dir.decode('UTF-8')):
                 # exclude special paths from list of trusted files
+                continue
+            if custom_excl_re is not None and custom_excl_re.match(to_be_walked_dir.decode('UTF-8')):
                 continue
             scandirs.append(dirname)
         # slice assignment, to modify `dirnames` in place (so that os.walk() will recurse only
@@ -82,6 +90,8 @@ def generate_trusted_files(root_dir, already_added_files):
 
             if exclude_re.match(filename):
                 # exclude special files and paths from list of trusted files
+                continue
+            if custom_excl_re is not None and custom_excl_re.match(filename):
                 continue
             if '\n' in filename:
                 # we use TOML's basic single-line strings, can't have newlines

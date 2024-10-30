@@ -38,6 +38,7 @@ COPY --from=gramine --chown={{app_user}} /gramine/meson_build_output /gramine/me
 
 # Copy helper scripts and Gramine manifest
 COPY --chown={{app_user}} *.py /gramine/app_files/
+COPY --chown={{app_user}} gsc_custom_exclfiles.txt /gramine/app_files/
 COPY --chown={{app_user}} apploader.sh /gramine/app_files/
 COPY --chown={{app_user}} entrypoint.manifest /gramine/app_files/
 

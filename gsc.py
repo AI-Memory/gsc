@@ -447,6 +447,7 @@ def gsc_build(args):
 
     # copy helper script to finalize the manifest from within graminized Docker image
     shutil.copyfile('finalize_manifest.py', tmp_build_path / 'finalize_manifest.py')
+    shutil.copyfile('gsc_custom_exclfiles.txt', tmp_build_path / 'gsc_custom_exclfiles.txt')
 
     # Intel's SGX PGP RSA-2048 key signing the intel-sgx/sgx_repo repository. Expires 2027-03-20.
     # Available at https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key
